@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>미궁의 카드모음</title>
+<style>
+:root{color-scheme:dark;--paper:#ede5d2;--gold:#d3ac65;--muted:#aba59a;--bg:#111713}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--paper);font-family:"Malgun Gothic",sans-serif}
+header{padding:27px 38px 22px;border-bottom:1px solid #354036;display:flex;justify-content:space-between;align-items:center;gap:18px}
+h1{font-size:27px;letter-spacing:-1px;margin:0 0 7px}.eyebrow{font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:9px}
+.subtitle{font-size:12px;color:var(--muted);line-height:1.7}.status{font-size:12px;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.dot{width:7px;height:7px;background:#90c592;border-radius:50%}.status.off .dot{background:#d0a45d}
+main{display:grid;grid-template-columns:172px minmax(360px,1fr) 460px;min-height:calc(100vh - 116px)}
+nav{padding:26px 16px;border-right:1px solid #354036}button,input,select{font:inherit}
+.tab{width:100%;background:none;border:1px solid transparent;color:var(--muted);padding:14px 11px;cursor:pointer;text-align:left;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;border-radius:7px;font-size:13px}
+.tab.active{background:#253528;color:var(--paper);border-color:#57704c}.tab:hover{background:#1e2b21}.count{font-size:11px;color:#929e8e}
+.collection{padding:25px 27px}.toolbar{display:flex;gap:10px;margin-bottom:23px}input,select{border:1px solid #435043;background:#1c251d;color:var(--paper);padding:11px 12px;border-radius:6px}input{min-width:0;flex:1}select{width:112px}
+.results{font-size:12px;color:var(--muted);margin-bottom:15px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:19px 15px}
+.card{border:1px solid #435043;border-radius:9px;background:#1c251d;padding:10px;cursor:pointer;text-align:left;color:var(--paper);transition:transform .15s,border-color .15s;min-width:0}
+.card:hover{transform:translateY(-4px);border-color:var(--gold)}.card.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.art{height:400px;background:#111713;border-radius:5px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.art img{width:100%;height:100%;object-fit:contain}.placeholder{font-size:12px;color:#7d8d79}.card-name{font-size:13px;font-weight:bold;margin:12px 0 8px;line-height:1.5}.tag{font-size:10px;color:var(--gold);letter-spacing:1px}
+aside{border-left:1px solid #354036;padding:26px 24px;position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:#172019}
+.detail-caption{font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:19px}.detail-art{height:600px;position:relative;border-radius:10px;overflow:hidden;background:#101610}
+.detail-art .picture{width:100%;height:100%;object-fit:contain;padding:23px}.detail-art .frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
+h2{font-size:24px;margin:23px 0 12px;line-height:1.5}.desc{font-size:14px;line-height:1.9;white-space:pre-wrap;border-top:1px solid #39473a;margin-top:18px;padding-top:18px}
+.source{font-size:10px;line-height:1.8;color:#81927d;word-break:break-all;margin-top:25px}.hint{font-size:11px;line-height:1.8;color:var(--muted);margin-top:25px}
+.empty{color:var(--muted);font-size:14px;padding:35px 0;line-height:1.9}.banner{padding:18px 28px;background:#594527;font-size:13px;line-height:1.8;display:none}
+@media(min-width:1700px){main{grid-template-columns:190px 1fr 460px}.detail-art{height:600px}}
+@media(max-width:1060px){main{grid-template-columns:150px 1fr 420px}.collection{padding:20px 16px}aside{padding:20px 17px}.detail-art{height:600px}.grid{grid-template-columns:repeat(auto-fill,minmax(265px,1fr))}.art{height:400px}}
+@media(max-width:760px){header{padding:20px;align-items:flex-start;flex-direction:column}main{display:block}nav{display:flex;overflow:auto;padding:12px;gap:6px;border-right:0;border-bottom:1px solid #354036}.tab{min-width:116px;width:auto;white-space:nowrap;padding:10px;gap:12px}.collection{padding:18px}.grid{grid-template-columns:repeat(2,1fr)}aside{position:relative;height:auto;border-left:0;border-top:1px solid #354036}.detail-art{height:600px}}
+.art,.detail-art{display:flex;align-items:center;justify-content:center}
+.card-visual{height:100%;aspect-ratio:670/1000;max-width:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.art .card-visual .frame,.detail-art .card-visual .frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none}
+.art .card-visual .picture,.detail-art .card-visual .picture{position:absolute;left:9%;top:8%;width:82%;height:84%;object-fit:contain;padding:0;z-index:1}
+.card-visual .placeholder{position:relative;z-index:1;text-align:center;padding:12px}
+.art .full-card,.detail-art .full-card{width:100%;height:100%;object-fit:contain;padding:0}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">DELICIOUS IN DUNGEON · CARD ARCHIVE</div><h1>미궁의 카드모음</h1><div class="subtitle">다른 컴퓨터에서도 열 수 있는 카드모음입니다.</div></div><div class="status off" id="status"><span class="dot"></span><span id="statusText">데이터 연결 중</span></div></header>
+<div class="banner" id="banner"></div>
+<main><nav id="tabs"></nav><section class="collection"><div class="toolbar"><input id="search" type="search" placeholder="이름이나 효과로 검색" aria-label="카드 검색"><select id="grade" aria-label="카드 등급"><option value="">모든 등급</option><option value="0">일반</option><option value="1">고급</option><option value="2">최고급</option><option value="3">전설</option></select></div><div class="results" id="results"></div><div class="grid" id="grid"></div></section><aside id="detail"><div class="empty">카드를 선택하면 상세 정보가 표시됩니다.</div></aside></main>
+<script src="card-data.js"></script>
+<script>
+const types=['미궁의 법칙','전투','탐험','식재료','완성요리'];
+let cards=[],tab=types[0],selected=null,version='',loading=false,lastGood=null;
+const $=id=>document.getElementById(id);
+function node(tag,className,text){const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n}
+function art(card,large=false){
+const box=node('div',large?'detail-art':'art');
+if(card.fullCard){const image=node('img','full-card');image.src=card.fullCard;image.alt=card.name+' 전체 카드';image.loading=large?'eager':'lazy';image.onerror=()=>{image.remove();box.append(node('span','placeholder','Unity에서 카드 이미지를 다시 생성해 주세요'))};box.append(image);return box}
+const visual=node('div','card-visual');
+if(card.frame){const frame=node('img','frame');frame.src=card.frame;frame.alt=card.gradeName+' 프레임';frame.loading=large?'eager':'lazy';frame.onerror=()=>frame.remove();visual.append(frame)}
+if(card.image){const img=node('img','picture');img.src=card.image;img.alt=card.name;img.loading=large?'eager':'lazy';img.onerror=()=>{img.remove();visual.append(node('span','placeholder','이미지를 불러오지 못했습니다'))};visual.append(img)}else visual.append(node('span','placeholder','이미지 미등록'));
+box.append(visual);return box}
+function filtered(){const term=$('search').value.trim().toLocaleLowerCase(),grade=$('grade').value;return cards.filter(c=>c.type===tab&&(tab===types[0]||grade===''||String(c.grade)===grade)&&(!term||(c.name+' '+c.description).toLocaleLowerCase().includes(term)))}
+function draw(){const list=filtered();$('grade').disabled=tab===types[0];$('tabs').replaceChildren();for(const t of types){const b=node('button','tab'+(tab===t?' active':''));b.append(node('span','',t),node('span','count',String(cards.filter(c=>c.type===t).length)));b.onclick=()=>{tab=t;selected=null;draw()};$('tabs').append(b)}
+if(!list.some(c=>c.id===selected))selected=list[0]?.id??null;$('results').textContent=tab+' · '+list.length+'종';$('grid').replaceChildren();for(const card of list){const b=node('button','card'+(card.id===selected?' selected':''));b.append(art(card),node('div','card-name',card.name),node('div','tag',card.gradeName+(card.subtype==='조미료'?' · 조미료':'')));b.onclick=()=>{selected=card.id;draw()};$('grid').append(b)}if(!list.length)$('grid').append(node('div','empty','조건에 맞는 카드가 없습니다.'));detail(cards.find(c=>c.id===selected))}
+function detail(card){$('detail').replaceChildren();if(!card){$('detail').append(node('div','empty','표시할 카드가 없습니다.'));return}$('detail').append(node('div','detail-caption','CARD DETAIL'),art(card,true),node('h2','',card.name),node('div','tag',card.type+' · '+card.gradeName),node('div','desc',card.description||'등록된 효과 설명이 없습니다.'),node('div','source',card.path),node('div','hint','내보낸 시점의 카드 데이터입니다. 원본 변경사항을 반영하려면 다시 내보내세요.'))}
+function status(ok,text){$('status').classList.toggle('off',!ok);$('statusText').textContent=text}
+async function sync(){if(loading||location.protocol==='file:')return;loading=true;try{const r=await fetch('/api/cards',{cache:'no-store'});const data=await r.json();if(!r.ok)throw Error(data.error||'연결 실패');lastGood=new Date();const ready=data.cards.filter(c=>c.fullCard).length;status(true,'전체 카드 '+ready+'/'+data.cards.length+' · '+lastGood.toLocaleTimeString('ko-KR'));$('banner').style.display=data.missing.length?'block':'none';if(data.missing.length)$('banner').textContent='카드 데이터베이스에서 연결이 끊어진 카드 '+data.missing.length+'개를 찾았습니다.';if(version!==data.version){version=data.version;cards=data.cards;draw()}}catch(e){status(false,'연결 확인 중');$('banner').style.display='block';$('banner').textContent='자동 연동이 중단되었습니다. 「카드모음 열기.cmd」를 다시 실행해 주세요. '+e.message}finally{loading=false}}
+$('search').oninput=draw;$('grade').onchange=draw;
+cards=window.CARD_GALLERY_SNAPSHOT.cards;draw();
+status(true,'저장된 카드모음 · '+window.CARD_GALLERY_SNAPSHOT.updated);
+
+</script>
+</body></html>
